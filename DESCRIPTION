@@ -1,0 +1,18 @@
+Package: normalizer
+Title: Normalize Data for Machine Learning Tasks
+Version: 0.0.1
+Authors@R: c(
+  person("Michael", "Kane",
+         email = "michael.kane@yale.edu",
+         role = c("aut", "cre"),
+         comment = c(ORCID = "http://orcid.org/0000-0003-1899-6662")))
+Description: What the package does (one paragraph).
+License: LGPL (>= 2.1)
+Encoding: UTF-8
+LazyData: true
+Imports:
+  simputation,
+  equivalent
+RoxygenNote: 6.1.1
+Suggests: 
+    testthat
