@@ -59,7 +59,6 @@ gram_schmidt.matrix <- function(x, drop_colinear = TRUE, order_pivot = TRUE) {
   if (order_pivot) {
     ret <- ret[, order(pivot)]
   } 
-  attr(ret, "pivot") <- pivot
-  attr(ret, "rank") <- r$rank
+  attr(ret, "qr") <- r
   ret
 }
