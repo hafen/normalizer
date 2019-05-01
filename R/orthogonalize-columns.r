@@ -15,6 +15,7 @@
 #' formula and an orthogonalized independent variables.
 #' @importFrom crayon red
 #' @importFrom dplyr bind_cols
+#' @importFrom stats terms
 #' @export
 orthogonalize_columns <- function(x, form, drop_colinear = TRUE, 
                                   order_pivot = TRUE) {

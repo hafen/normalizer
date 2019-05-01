@@ -1,20 +1,19 @@
 
-# #' @importFrom stats as.formula
-# #' @importFrom foreach foreach %do%
-# #' @export
-# make_formulas <- function(dep_vars, indep_vars) {
-#   dv <- iv <- NULL
-#   ret <- foreach(dv = dep_vars, .combine = c) %do% {
-#     foreach(iv = indep_vars, .combine = c) %do% {
-#       as.formula(paste(dv, "~", paste(indep_vars, sep = " + ")))
-#     }
-#   }
-#   class(ret) <- "formulas"
-#   ret
-# }
-
+#' @title Create Multiple Imputations
+#'
+#' @param x a data.frame or matrix.
+#' @param form a formula describing the model.
+#' @param impute_model the imputation models to apply to the data. Default is
+#' list(imput_rf = simputation::impute_rf, imput_mf = simputation::impute_mf,
+#' impute_rhd = simputation::impute_rhd, impute_knn = simputation::impute_knn)
+#' @param num_imputes the number of imputations per model. Default 5.
+#' @param remove_equivalents after imputation should redundant imputed data
+#' be removed. Default TRUE.
+#' @param .key the name of column containing the list of imputed data sets.
+#' Default is "data".
 #' @export
-multiple_impute <- function(x, form, impute_model, num_imputes) {
+multiple_impute <- function(x, form, impute_model, num_imputes, 
+  remove_equivalents, .key) {
   
   # Dispatch on form, *not* the first argument, which is assumed to be a
   # data.frame/tibble.
@@ -23,7 +22,8 @@ multiple_impute <- function(x, form, impute_model, num_imputes) {
 
 #' @importFrom crayon red
 #' @export
-multiple_impute.default <- function(x, form, impute_model, num_imputes) {
+multiple_impute.default <- function(x, form, impute_model, num_imputes,
+  remove_equivalents, .key) {
   stop(red("Don't know how to impute when \"form\" argument is of type ", 
            class(form), ".", sep = ""))
 }
@@ -34,6 +34,8 @@ multiple_impute.default <- function(x, form, impute_model, num_imputes) {
 impute_n_times <- function(x, form, impute_model, num_imputes = 5, 
   impute_name = as.character(match.call()$impute_model),
   .key = "data") {
+  
+  i <- NULL
 
   if (num_imputes < 1) {
     ret <- tibble(model = character(), impute = integer(), .key = list())

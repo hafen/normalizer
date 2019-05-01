@@ -30,11 +30,13 @@ gram_schmidt <- function(x, drop_colinear = TRUE, order_pivot = TRUE) {
   UseMethod("gram_schmidt", x)
 }
 
+#' @export
 gram_schmidt.default <- function(x, drop_colinear, order_pivot) {
   stop(paste("Don't know how to perform Gram-Schmidt process on an object of",
              "type", class(x)))
 }
 
+#' @export
 gram_schmidt.data.frame <- function(x, drop_colinear = TRUE, 
                                     order_pivot = TRUE) {
   non_numeric_cols <- !unlist(lapply(x, is.numeric))
