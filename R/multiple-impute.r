@@ -103,3 +103,61 @@ multiple_impute.formula <- function(x, form,
   }
 }
 
+#' Average data.frames
+#'
+#' @param x a list of data.frames to average.
+#' @importFrom dplyr bind_rows bind_cols
+#' @importFrom crayon red
+#' @export
+tibbles_average <- function(x) {
+  ret <- tibble()
+  if (length(x) > 1) {
+    num_cols <- unlist(lapply(x, ncol))
+    if (!isTRUE(all(0 == diff(num_cols)))) {
+      stop(red("Not all data sets have the same number of columns."))
+    } else {
+      num_cols <- num_cols[1]
+    }
+    num_rows <- unlist(lapply(x, nrow))
+    if (!isTRUE(all(0 == diff(num_cols)))) {
+      stop(red("Not all data sets have the same number of columns."))
+    } else {
+      num_rows <- num_rows[1]
+    }
+
+    ret <- foreach(j = seq_len(num_cols), .combine = bind_cols) %do% {
+      cc <- foreach(di = seq_len(length(x)), .combine = bind_cols) %do% {
+        x[[di]][,j, drop = FALSE]  
+      }
+      if (!isTRUE(all(unlist(lapply(cc, class)) == class(cc[[1]])))) {
+        stop(red("Class inconsistency in column ", j, ".", sep = ""))
+      }
+      if (inherits(cc[[1]], "numeric")) {
+        cc[[1]] <- apply(as.matrix(cc), 1, 
+          function(x) {
+            ret <- NA
+            if (!isTRUE(all(is.na(x)))) {
+              mean(x, na.rm = TRUE)
+            }
+          })
+      } else if (inherits(cc[[1]], "character") || 
+                 inherits(cc[[1]], "factor")) {
+        for (i in seq_len(num_rows)) {
+          tab <- sort(table(unlist(cc[i,])), decreasing = TRUE)
+          if (length(tab) == 0) {
+            cc[[1]][i] <- NA
+          } else {
+            cc[[1]][i] <- names(tab)[1]
+          }
+        }
+      } else {
+        stop(red("Don't know how to combine columns with class ", 
+                 class(cc[[1]]), ".", sep = ""))
+      }
+      cc[,1]
+    }
+  } else if (length(x) == 1) {
+    ret <- x[[1]]
+  }
+  ret
+}

@@ -1,8 +1,6 @@
 library(testthat)
 library(dplyr)
 library(purrr)
-library(normalizer)
-
 
 # Create the data from the online simputation example.
 
@@ -10,13 +8,36 @@ dat <- iris
 # empty a few fields
 dat[1:3, 1] <- dat[3:7, 2] <- dat[8:10, 5] <- NA
 
-form <- Species + Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
+# Imputation model description.
+impute_form <- Species + Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
 
-mi <- impute_n_times(dat, form, impute_rf)
+mi <- impute_n_times(dat, impute_form, impute_rf)
 
 # Create a list of imputed data sets.
-mis <- multiple_impute(dat, form)
+mis <- multiple_impute(dat, impute_form)
 
 expect_true(inherits(mi, "data.frame"))
 
-mis %>% mutate(gs = map(data, gram_schmidt))
+mis <- mis %>% mutate(gs = map(data, gram_schmidt))
+
+
+## FINISH THIS
+
+impute_form <- Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
+
+orth_form1 <- 
+  ~ Sepal.Length + Sepal.Width | Species + Petal.Length + Petal.Width
+
+orth_form2 <- 
+  ~ Petal.Length + Petal.Width | Species + Sepal.Length + Sepal.Width
+
+subtype_form <- Species ~.
+
+dat %>%
+  orthogonalize(orth_form1) %>%
+  orthogonalize(orth_form2) %>%
+  multiple_impute(impute_form)
+
+#  quantum_eraser_learn(subtype_form)
+    
+  
