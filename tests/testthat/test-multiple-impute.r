@@ -14,33 +14,40 @@ impute_form <- Species + Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
 mi <- impute_n_times(dat, impute_form, impute_rf)
 
 # Create an imputed data set.
-mi <- multiple_impute(dat, impute_form) %>%
-  combine_mi_tibble(mi) %>%
+mit <- multiple_impute(dat, impute_form) %>%
+  combine_mi_tibble() 
+
+mit$Sepal.Length2 <- mit$Sepal.Length + rnorm(150, sd = 0.1)
+
+# Orthogonalize columns based on Louvain clustering of the correlation
+# matrix.
+mit %>% 
   group_numeric_vars( ~ .) %>%
-  orthogonalize_columns()
+  orthogonalize_columns() %>%
+  as_tibble()
 
-expect_true(inherits(mi, "data.frame"))
+# Orthogonalize all columns
+mit %>% 
+  orthogonalize_columns() %>%
+  as_tibble()
 
-mis <- mis %>% mutate(gs = map(data, gram_schmidt))
+# Orthogonalize Sepal.Length and Petal.Length along with 
+# Sepal.Width and Petal.Width.
+mit %>% 
+  orthogonalize_columns( ~ Sepal.Length + Petal.Length | .) %>%
+  orthogonalize_columns( ~ Sepal.Width + Petal.Width | .) %>%
+  as_tibble()
 
+# Orthogonalize Sepal.Length and Petal.Length along with 
+# Sepal.Width and Petal.Width prioritizing Petal.Length and Petal.Width
+imp_ordering <- c("Petal.Length", "Petal.Width", "Sepal.Length", "Sepal.Width")
+mit %>% 
+  orthogonalize_columns( ~ Sepal.Length + Petal.Length | .,
+    imp_ordering = imp_ordering) %>%
+  orthogonalize_columns( ~ Sepal.Width + Petal.Width | .,
+    imp_ordering = imp_ordering) %>%
+  as_tibble()
 
-## FINISH THIS
+attributes(mit)$colinear_groups
 
-impute_form <- Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
-
-orth_form1 <- 
-  ~ Sepal.Length + Sepal.Width | Species + Petal.Length + Petal.Width
-
-orth_form2 <- 
-  ~ Petal.Length + Petal.Width | Species + Sepal.Length + Sepal.Width
-
-subtype_form <- Species ~.
-
-dat %>%
-  orthogonalize(orth_form1) %>%
-  orthogonalize(orth_form2) %>%
-  multiple_impute(impute_form)
-
-#  quantum_eraser_learn(subtype_form)
-    
   

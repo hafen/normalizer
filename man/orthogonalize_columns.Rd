@@ -4,8 +4,8 @@
 \alias{orthogonalize_columns}
 \title{Orthogonalize Columns of a data.frame}
 \usage{
-orthogonalize_columns(x, form, imp_order = NULL, drop_colinear = TRUE,
-  order_pivot = TRUE)
+orthogonalize_columns(x, form = NULL, imp_ordering = NULL,
+  drop_colinear = TRUE, order_pivot = TRUE)
 }
 \arguments{
 \item{x}{a data.frame.}
@@ -14,8 +14,8 @@ orthogonalize_columns(x, form, imp_order = NULL, drop_colinear = TRUE,
 based on numeric groupings (see group_numeric_vars). If no grouping 
 exists, then orthogonalization is performed for the entire data frame.}
 
-\item{imp_order}{columns of x ordered by their importance. (default NULL - 
-no importance ordering)}
+\item{imp_ordering}{column names of x ordered by their importance. 
+(default NULL - #' no importance ordering)}
 
 \item{drop_colinear}{should colinear columns be dropped? (default TRUE)}
 

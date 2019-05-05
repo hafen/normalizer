@@ -163,9 +163,32 @@ combine_mi_tibble <- function(x, col_name = "data") {
 #'
 #' @param x the data set.
 #' @param form the model description. Defaults is all numeric variables.
+#' @importFrom igraph cluster_louvain graph_from_adjacency_matrix
 #' @export
 group_numeric_vars <- function(x, form = ~ .) {
-  form <- expand_formula(x, form)
+  colinear_groups <- NULL
+  fu <- form_desc(x, form)
+  if (!is.null(fu$indep)) {
+    ungrouped <- c(fu$lh_terms, fu$cond)
+    non_numeric_indep <- which(unlist(lapply(x[,fu$indep], 
+      function(v) !is.numeric(v))))
+    if (length(non_numeric_indep) > 0) {
+      ungrouped <- c(ungrouped, names(non_numeric_indep))
+    }
+    group_vars <- setdiff(fu$indep, names(non_numeric_indep))
+    cm <- abs(cor(x[,group_vars]) - diag(1, length(group_vars)))
+    g <- graph_from_adjacency_matrix(cm, mode = "undirected", weighted = TRUE)
+    colinear_groups <- groups(cluster_louvain(g))
+    names(colinear_groups) <- NULL
+  } 
+  if (is.null(attributes(x)$colinear_groups)) {
+    attributes(x)$colinear_groups <- colinear_groups
+  } else {
+    # If we already have colinear group information then append.
+    attributes(x)$colinear_groups <- 
+      c(attributes(x)$colinear_groups, colinear_groups)
+  }
+  x
 }
 
 
