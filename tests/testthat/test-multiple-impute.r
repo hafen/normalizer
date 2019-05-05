@@ -13,7 +13,7 @@ impute_form <- Species + Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
 
 mi <- impute_n_times(dat, impute_form, impute_rf)
 
-# Create an imputed data set.
+# Impute using multiple models and combine them.
 mit <- multiple_impute(dat, impute_form) %>%
   combine_mi_tibble() 
 

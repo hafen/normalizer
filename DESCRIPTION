@@ -18,7 +18,8 @@ Imports:
   foreach,
   tidyr,
   tibble,
-  stats
+  stats,
+  igraph
 RoxygenNote: 6.1.1
 Suggests: 
     testthat
