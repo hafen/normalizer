@@ -13,10 +13,9 @@ multiple_impute(x, form, impute_model, num_imputes, remove_equivalents,
 \item{form}{a formula describing the model.}
 
 \item{impute_model}{the imputation models to apply to the data. Default is
-list(imput_rf = simputation::impute_rf, imput_mf = simputation::impute_mf,
-impute_rhd = simputation::impute_rhd, impute_knn = simputation::impute_knn)}
+list(imput_rf = simputation::impute_rf, imput_mf = simputation::impute_mf)}
 
-\item{num_imputes}{the number of imputations per model. Default 5.}
+\item{num_imputes}{the number of imputations per model. Default 10.}
 
 \item{remove_equivalents}{after imputation should redundant imputed data
 be removed. Default TRUE.}

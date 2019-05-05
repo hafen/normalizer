@@ -13,8 +13,11 @@ impute_form <- Species + Sepal.Length + Sepal.Width ~ Petal.Length + Petal.Width
 
 mi <- impute_n_times(dat, impute_form, impute_rf)
 
-# Create a list of imputed data sets.
-mis <- multiple_impute(dat, impute_form)
+# Create an imputed data set.
+mi <- multiple_impute(dat, impute_form) %>%
+  combine_mi_tibble(mi) %>%
+  group_numeric_vars( ~ .) %>%
+  orthogonalize_columns()
 
 expect_true(inherits(mi, "data.frame"))
 

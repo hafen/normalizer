@@ -4,13 +4,18 @@
 \alias{orthogonalize_columns}
 \title{Orthogonalize Columns of a data.frame}
 \usage{
-orthogonalize_columns(x, form, drop_colinear = TRUE,
+orthogonalize_columns(x, form, imp_order = NULL, drop_colinear = TRUE,
   order_pivot = TRUE)
 }
 \arguments{
-\item{x}{a data.frame}
+\item{x}{a data.frame.}
 
-\item{form}{the model description.}
+\item{form}{the model description. If missing, then a formula is generated
+based on numeric groupings (see group_numeric_vars). If no grouping 
+exists, then orthogonalization is performed for the entire data frame.}
+
+\item{imp_order}{columns of x ordered by their importance. (default NULL - 
+no importance ordering)}
 
 \item{drop_colinear}{should colinear columns be dropped? (default TRUE)}
 
