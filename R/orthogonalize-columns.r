@@ -19,6 +19,7 @@
 #' formula and an orthogonalized independent variables.
 #' @importFrom dplyr bind_cols
 #' @importFrom crayon red
+#' @importFrom fu form_desc
 #' @export
 orthogonalize_columns <- function(x, form = NULL, imp_ordering = NULL,
                                   drop_colinear = TRUE, 

@@ -164,6 +164,7 @@ combine_mi_tibble <- function(x, col_name = "data") {
 #' @param x the data set.
 #' @param form the model description. Defaults is all numeric variables.
 #' @importFrom igraph cluster_louvain graph_from_adjacency_matrix
+#' @importFrom fu form_desc
 #' @export
 group_numeric_vars <- function(x, form = ~ .) {
   colinear_groups <- NULL
