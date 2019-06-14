@@ -20,9 +20,19 @@ remove_equiv_columns <- function(x, keep_cols = character(), verbose = FALSE) {
   ec <- has_equiv_column(x, keep_cols, verbose)
   if (verbose) {
     if (any(ec)) {
-      cat(italic("\tDropping equivalent columns:\n\t\t",
-                 paste(names(ec)[ec], sep = "", collapse = "\n\t\t"),
-                 "\n", sep = ""), sep = "")
+      equiv_col <- c()
+      for (j in seq_len(ncol(x)-1)) {
+        equiv_col <- vapply((j+1):ncol(x),
+               function(cn) equiv(x[[j]], x[[cn]]),
+               NA)
+        if (isTRUE(any(equiv_col))) {
+          cat(italic("\tThe following column(s) equivalent to ", 
+                     names(x)[j], "\n\tand are getting dropped:\n\t\t",
+                     paste(names(x[,-seq_len(j), drop = FALSE])[equiv_col],
+                     sep = "", collapse = "\n\t\t"),
+                     "\n", sep = ""), sep = "")
+        }
+      }
     } else {
       cat(italic("No equivalent columns found.\n"))
     }
