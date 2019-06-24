@@ -25,7 +25,7 @@ collapsible_vars <- function(x, group_var) {
 #' @param collapse_name the variable name of the collapsed sub-data.frames.
 #' @importFrom tidyr nest_
 #' @export
-collapse <- function(x, key = "key", collapse_name = "data") {
+collapse_rows <- function(x, key = "key", collapse_name = "data") {
   svs <- NULL
   sv <- c(key, collapsible_vars(x, key))
   nsv <- setdiff(colnames(x), sv)
