@@ -1,6 +1,5 @@
 library(testthat)
 library(dplyr)
-library(purrr)
 
 # Create the data from the online simputation example.
 

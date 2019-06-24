@@ -23,7 +23,13 @@ remove_equiv_columns <- function(x, keep_cols = character(), verbose = FALSE) {
       equiv_col <- c()
       for (j in seq_len(ncol(x)-1)) {
         equiv_col <- vapply((j+1):ncol(x),
-               function(cn) equiv(x[[j]], x[[cn]]),
+               function(cn) {
+                 if (!(names(x)[cn] %in% keep_cols)) {
+                   equiv(x[[j]], x[[cn]])
+                 } else {
+                   FALSE
+                 }
+               },
                NA)
         if (isTRUE(any(equiv_col))) {
           cat(italic("\tThe following column(s) equivalent to ", 

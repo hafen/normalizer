@@ -103,10 +103,14 @@ multiple_impute.formula <- function(x, form,
 #' Combine mulitply imputed data.frames
 #'
 #' @param x a list of data.frames to average.
+#' @param col_name the column name in 'x' with the multiply-imputed data
+#' sets.
 #' @importFrom dplyr bind_rows bind_cols
 #' @importFrom crayon red
 #' @export
 combine_mi_tibble <- function(x, col_name = "data") {
+  di <- j <- NULL
+
   ret <- tibble()
   d <- x[[col_name]]
   if (length(d) > 1) {
@@ -163,8 +167,9 @@ combine_mi_tibble <- function(x, col_name = "data") {
 #'
 #' @param x the data set.
 #' @param form the model description. Defaults is all numeric variables.
-#' @importFrom igraph cluster_louvain graph_from_adjacency_matrix
+#' @importFrom igraph cluster_louvain graph_from_adjacency_matrix groups
 #' @importFrom fu form_desc
+#' @importFrom stats cor
 #' @export
 group_numeric_vars <- function(x, form = ~ .) {
   colinear_groups <- NULL

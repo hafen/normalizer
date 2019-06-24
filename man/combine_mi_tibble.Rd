@@ -8,6 +8,9 @@ combine_mi_tibble(x, col_name = "data")
 }
 \arguments{
 \item{x}{a list of data.frames to average.}
+
+\item{col_name}{the column name in 'x' with the multiply-imputed data
+sets.}
 }
 \description{
 Combine mulitply imputed data.frames
