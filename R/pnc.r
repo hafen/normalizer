@@ -42,7 +42,6 @@ pnc_ds <- function(x, collapse_on,
               keep_cols = character(),
               verbose = verbose)
   })
-  
   if (verbose) {
     cat("\n")
   }
@@ -246,7 +245,9 @@ handle_repeated_vars <- function(arg_list, rvs, collapse_on) {
   }
   for (i in seq_along(arg_list)) {
     rem_inds <- na.omit(match(names(rvs), colnames(arg_list[[i]])))
-    arg_list[[i]] <- arg_list[[i]][, -rem_inds]
+    if (length(rem_inds) > 0) {
+      arg_list[[i]] <- arg_list[[i]][, -rem_inds]
+    }
   }
   c(arg_list, list(new_arg))
 }
@@ -330,19 +331,12 @@ consolidate <- function(..., collapse_on, verbose = FALSE) {
   # Make sure if a variable appears in more than one data set it is the 
   # same in each data set.
   rvs <- repeat_vars(arg_list, collapse_on = collapse_on)
-
   if (length(rvs) > 0) {
     if (verbose) {
       cat(italic("\tHandling repeated variables."))
     }
     arg_list <- handle_repeated_vars(arg_list, rvs, collapse_on)
   }  
-#  if (length(violations) > 0) {
-#    stop(red("The following variables appear in multiple data sets but are ",
-#             "not consistent\n  and can't be merged:\n\t", 
-#             paste(violations, collapse= "\n\t"), 
-#             sep = ""))
-#  }
 
   col_names <- list(colnames(arg_list[[1]]))
   all_col_names <- unique(unlist(lapply(arg_list, colnames)))
