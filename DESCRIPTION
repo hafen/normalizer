@@ -1,6 +1,6 @@
 Package: normalizer
 Title: Normalize Data for Machine Learning Tasks
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: c(
   person("Michael", "Kane",
          email = "michael.kane@yale.edu",

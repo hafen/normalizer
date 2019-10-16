@@ -23,14 +23,15 @@ collapsible_vars <- function(x, group_var) {
 #' @param x and ADaM formatted data.frame
 #' @param key which variable should be collpased on? (Default: "USUBJID")
 #' @param collapse_name the variable name of the collapsed sub-data.frames.
-#' @importFrom tidyr nest_
+#' @importFrom tidyr nest
 #' @export
 collapse_rows <- function(x, key = "key", collapse_name = "data") {
   svs <- NULL
   sv <- c(key, collapsible_vars(x, key))
   nsv <- setdiff(colnames(x), sv)
   if (length(nsv) > 0 && length(unique(x[[key]])) < nrow(x)) {
-    x <- nest_(x, collapse_name, colnames(x)[match(nsv, colnames(x))])
+    x <- eval(parse(text = gsub("collapse_name", collapse_name, 
+      "nest(x, collapse_name = colnames(x)[match(nsv, colnames(x))])")))
   }
   x
 }
