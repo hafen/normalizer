@@ -137,7 +137,6 @@ normalize <- function(x, collapse_on, collapse_name,
     col_types <- sapply(x, class)
     colnames(x)[colnames(x) != collapse_on & col_types == "character"]
   }
-
   if (remove_equiv_columns) {
     x %>%
       tcat("Removing equivalent columns.\n", verbose = verbose,
@@ -161,7 +160,7 @@ normalize <- function(x, collapse_on, collapse_name,
   x %>%
     mutate_at(to_factor(.), as.factor) %>%
     tcat("Collapsing rows.\n", verbose = verbose, style = green) %>%
-    collapse_rows(collapse_on, collapse_name) 
+    collapse_rows(collapse_on, {{collapse_name}}) 
 }
 
 #' Find Variables Appearing Multiple Data Sets

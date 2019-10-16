@@ -30,8 +30,7 @@ collapse_rows <- function(x, key = "key", collapse_name = "data") {
   sv <- c(key, collapsible_vars(x, key))
   nsv <- setdiff(colnames(x), sv)
   if (length(nsv) > 0 && length(unique(x[[key]])) < nrow(x)) {
-    x <- eval(parse(text = gsub("collapse_name", collapse_name, 
-      "nest(x, collapse_name = colnames(x)[match(nsv, colnames(x))])")))
+    x <- nest(x, {{collapse_name}} := colnames(x)[match(nsv, colnames(x))])
   }
   x
 }
