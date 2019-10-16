@@ -160,7 +160,7 @@ normalize <- function(x, collapse_on, collapse_name,
   x %>%
     mutate_at(to_factor(.), as.factor) %>%
     tcat("Collapsing rows.\n", verbose = verbose, style = green) %>%
-    collapse_rows(collapse_on, {{collapse_name}}) 
+    collapse_rows(collapse_on, collapse_name) 
 }
 
 #' Find Variables Appearing Multiple Data Sets
