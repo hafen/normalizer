@@ -25,3 +25,6 @@ Imports:
 RoxygenNote: 6.1.1
 Suggests: 
     testthat
+Remotes:
+  presagia-analytics/equivalent,
+  presagia-analytics/fu
